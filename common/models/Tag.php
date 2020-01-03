@@ -44,4 +44,55 @@ class Tag extends \yii\db\ActiveRecord
             'frequency' => 'Frequency',
         ];
     }
+
+    public static function string2array($tag){
+        return explode(',',$tag);
+    }
+
+    public static function array2string($tagArr){
+        return implode(',',$tagArr);
+    }
+
+    public static function addTags($tags){
+        if(empty($tags)) return;
+        foreach($tags as $name){
+            $count = Tag::find() -> where(['name'=>$name]) -> count();
+
+            if($count){
+                $once = Tag::find() -> where(['name'=>$name]) -> one();
+                $once -> frequency += 1;
+                $once -> save();
+            }else{
+                $tag = new Tag;
+                $tag -> name = $name;
+                $tag -> frequency = 1;
+                $tag -> save();
+            }
+        }
+    }
+
+    public static function removeTags($tags){
+        if(empty($tags)) return;
+        foreach($tags as $name){
+            $count = Tag::find() -> where(['name'=>$name]) -> count();
+            if($count){
+                $tag = Tag::find() -> where(['name'=>$name]) -> one();
+                if($tag -> frequency <= 1){
+                   $tag -> delete(); 
+                }else{
+                    $tag -> freency -= 1;
+                    $tag -> save();
+                }
+            }
+        }
+    }
+
+    public static function updateFrequency($oldTags,$newTags){
+        if(!empty($oldTags) || !empty($newTags)){
+            $oldTagArr = self::string2array($oldTags);
+            $newTagArr = self::string2Array($newTags);
+            self::addTags(array_values(array_diff($newTagArr,$oldTagArr)));
+            self::removeTags(array_values(array_diff($oldTagArr,$newTagArr)));
+        }
+    }
 }

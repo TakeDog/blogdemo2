@@ -95,6 +95,13 @@ class CommentController extends Controller
         ]);
     }
 
+    public function actionApprove($id){
+        $model = $this->findModel($id);
+        if($model -> approve()){
+            return $this -> redirect(['index']);
+        }
+    }
+
     /**
      * Deletes an existing Comment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

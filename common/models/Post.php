@@ -25,6 +25,9 @@ class Post extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    private $_oldTag;
+    
+
     public static function tableName()
     {
         return 'post';
@@ -59,6 +62,7 @@ class Post extends \yii\db\ActiveRecord
             'create_time' => '创建时间',
             'update_time' => '更新时间',
             'author_id' => '作者',
+            'authorName' => '作者'
         ];
     }
 
@@ -84,5 +88,35 @@ class Post extends \yii\db\ActiveRecord
     public function getStatus0()
     {
         return $this->hasOne(Poststatus::className(), ['id' => 'status']);
+    }
+
+    public function beforeSave($insert){
+        if(Parent::beforeSave($insert)){
+
+            if($insert){
+                $this -> create_time = time();
+                $this -> update_time = time();
+            }else{
+                $this -> update_time = time();
+            }
+            return true;
+
+        }else{
+            return false;
+        }
+    }
+
+    public function afterFind(){
+        parent::afterFind();
+        return $this -> _oldTag = $this -> tags;
+    }
+
+    public function afterSave($insert,$changeAttributes){
+        parent::afterSave($insert,$changeAttributes);
+        Tag::updateFrequency($this -> _oldTag,$this -> tags);
+    }
+    public function afterDelete(){
+        parent::afterDelete();
+        Tag::updateFrequency($this -> tags,'');
     }
 }
