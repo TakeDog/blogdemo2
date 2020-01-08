@@ -10,7 +10,10 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'name' => '叶健发的博客系统',
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'post/index',
+    'language' => 'zh-CN',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',

@@ -7,7 +7,9 @@ use common\models\Post;
 use common\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -26,6 +28,22 @@ class PostController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            // 'access' => [
+            //         'class' => AccessControl::className(),
+            //         'rules' =>[
+            //              [
+            //                 'actions'=>['index','view'],
+            //                 'allow' => true,
+            //                 'roles' => ['?']
+            //             ],
+            //             [
+            //                 'actions'=>['create','update'],
+            //                 'allow' => true,
+            //                 'roles' => ['@']
+            //             ]
+            //         ]
+                
+            // ]
         ];
     }
 
@@ -35,6 +53,9 @@ class PostController extends Controller
      */
     public function actionIndex()
     {
+        if(!Yii::$app -> user -> can('indexPost')){
+            throw new ForbiddenHttpException('对不起，您无操作权限。');
+        }
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -66,6 +87,11 @@ class PostController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app -> user -> can('createPost')){
+            throw new ForbiddenHttpException('对不起，您无操作权限。');
+        }
+
+
         $model = new Post();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -110,6 +136,7 @@ class PostController extends Controller
 
         return $this->redirect(['index']);
     }
+
 
     /**
      * Finds the Post model based on its primary key value.

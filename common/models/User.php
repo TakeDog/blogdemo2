@@ -55,9 +55,52 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [['email'], 'unique'],
+            [['email'], 'required'],
+            [['email'], 'email'],
         ];
     }
 
+
+    public function attributeLabels()
+   {
+       return [
+           'id' => 'ID',
+           'username' => '用户名',
+           'auth_key' => 'Auth Key',
+           'password_hash' => 'Password Hash',
+           'password_reset_token' => 'Password Reset Token',
+           'email' => '邮箱',
+           'status' => '状态',
+           'created_at' => '创建时间',
+           'updated_at' => '最近更新',
+       ];
+   }
+
+
+    public static function allStatus(){
+        return [SELF::STATUS_ACTIVE => '正常', SELF::STATUS_DELETED => '删除'];
+    }
+
+    public function getStatusStr(){
+       return $this -> status == SELF::STATUS_ACTIVE ? '正常':'删除';
+    }
+
+    public function beforeSave($insert){
+        if(Parent::beforeSave($insert)){
+
+            if($insert){
+                $this -> created_at = time();
+                $this -> updated_at = time();
+            }else{
+                $this -> updated_at = time();
+            }
+            return true;
+
+        }else{
+            return false;
+        }
+    }
     /**
      * {@inheritdoc}
      */

@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\AdminuserSearch */
+/* @var $model common\models\PostSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="adminuser-search">
+<div class="post-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,19 +17,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'username') ?>
+    <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'nickname') ?>
+    <?= $form->field($model, 'content') ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'tags') ?>
 
-    <?= $form->field($model, 'profile') ?>
+    <?= $form->field($model, 'status') ?>
 
-    <?php // echo $form->field($model, 'password_hash') ?>
+    <?php // echo $form->field($model, 'create_time') ?>
 
-    <?php // echo $form->field($model, 'password_reset_token') ?>
+    <?php // echo $form->field($model, 'update_time') ?>
 
-    <?php // echo $form->field($model, 'auth_key') ?>
+    <?php // echo $form->field($model, 'author_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

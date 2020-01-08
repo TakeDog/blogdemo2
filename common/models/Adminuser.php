@@ -35,9 +35,9 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'nickname', 'password', 'email', 'password_hash', 'auth_key'], 'required'],
+            [['username', 'nickname',  'email', 'password_hash', 'auth_key'], 'required'],
             [['profile'], 'string'],
-            [['username', 'nickname', 'password', 'email'], 'string', 'max' => 128],
+            [['username', 'nickname',  'email'], 'string', 'max' => 128],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255], 
             [['auth_key'], 'string', 'max' => 32], 
         ];
@@ -50,11 +50,10 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Username',
-            'nickname' => 'Nickname',
-            'password' => 'Password',
-            'email' => 'Email',
-            'profile' => 'Profile',
+            'username' => '用户名',
+            'nickname' => '真实姓名',
+            'email' => '邮箱',
+            'profile' => '签名',
             'password_hash' => 'Password Hash', 
             'password_reset_token' => 'Password Reset Token', 
             'auth_key' => 'Auth Key',
@@ -114,19 +113,6 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            
-        ]);
-    }
-
-    /**
-     * Finds user by verification email token
-     *
-     * @param string $token verify email token
-     * @return static|null
-     */
-    public static function findByVerificationToken($token) {
-        return static::findOne([
-            'verification_token' => $token,
             
         ]);
     }
