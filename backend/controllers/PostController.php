@@ -152,5 +152,13 @@ class PostController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+
+        // Yii::$app -> user -> can();
+        // Yii::$app -> urlManager -> createUrl();
+        // Yii::$app -> request -> post();
+        // Yii::$app -> request -> queryParams();
+
     }
 }
+
+
